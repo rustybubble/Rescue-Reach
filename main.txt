@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blank Page</title>
+    <link rel="stylesheet" href="./style.css"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            background-color: #265ab3;
+            overflow: hidden;
+        }
+        .top-bar button {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center; 
+            padding: 14px 16px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .top-bar button:hover {
+            background-color: #ddd;
+            color: rgb(0, 0, 0);
+        }
+        #blank-page {
+            height: 100vh;
+            width: 100%;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button onclick="location.href='main.html'">RescueReach</button>
+        <button onclick="location.href='satellite.html'">Satellite Mode</button>
+        <button onclick="location.href='detection.html'">Drone View</button>
+    </div>
+    <div id="blank-page"></div>
+</body>
+</html>

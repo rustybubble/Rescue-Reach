@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Mode</title>
+    <link rel="stylesheet" href="./style.css"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            background-color: #265ab3;
+            overflow: hidden;
+        }
+        .top-bar button {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center; 
+            padding: 14px 16px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .top-bar button:hover {
+            background-color: #ddd;
+            color: rgb(0, 0, 0);
+        }
+        #map-container {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+        }
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 5;
+        }
+        #coordinates {
+            margin-top: 10px;
+        }
+    </style>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCznd_EIOHuSYsj9H3X5yrV-EaC0n1O1XM&callback=initMap&libraries=maps,marker&v=beta"></script>
+    <script>
+        var map;
+        var marker;
+        var stationaryMarker;
+        var tempMarker;
+        var altitude = 1;
+        var movingToClick = false;
+        var clickDestination = null;
+
+        function initMap() {
+            const initialPosition = getSavedPosition() || { lat: -34.4758, lng: 19.3518 };
+            const mapOptions = {
+                center: initialPosition,
+                zoom: 15,
+                mapTypeId: 'satellite'
+            };
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            marker = new google.maps.Marker({
+                position: initialPosition,
+                map: map,
+                title: 'Drone Location',
+                icon: {
+                    url: 'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="32" font-size="32">🚁</text></svg>',
+                    scaledSize: new google.maps.Size(32, 32)
+                }
+            });
+
+            updateCoordinates(marker.getPosition());
+
+            const stationaryPosition = { lat: -34.4770, lng: 19.3530 };
+            stationaryMarker = new google.maps.Marker({
+                position: stationaryPosition,
+                map: map,
+                title: 'Stationary Marker',
+                icon: {
+                    url: 'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="32" font-size="32">🏠</text></svg>',
+                    scaledSize: new google.maps.Size(32, 32)
+                }
+            });
+
+            map.addListener('click', function(event) {
+                clickDestination = event.latLng;
+                movingToClick = true;
+
+                if (tempMarker) {
+                    tempMarker.setMap(null);
+                }
+                tempMarker = new google.maps.Marker({
+                    position: clickDestination,
+                    map: map,
+                    title: 'Click Destination'
+                });
+
+                moveMarker();
+            });
+        }
+
+        function moveMarker() {
+    const step = 0.00005; // Smaller step size for slower movement
+    const interval = setInterval(function() {
+        if (!movingToClick || !clickDestination) {
+            clearInterval(interval);
+            return;
+        }
+
+        const currentPosition = marker.getPosition();
+        const destination = clickDestination;
+
+        const newLatLng = moveTowards(currentPosition, destination, step);
+        marker.setPosition(newLatLng);
+        updateCoordinates(newLatLng);
+
+        if (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, destination) < step) {
+            marker.setPosition(destination);
+            updateCoordinates(destination);
+            savePosition(destination);
+            if (tempMarker) tempMarker.setMap(null);
+            movingToClick = false;
+            clearInterval(interval);
+        }
+    }, 1000); // Increased interval for slower movement
+}
+
+function moveTowards(currentPosition, destination, step) {
+    const deltaLat = destination.lat() - currentPosition.lat();
+    const deltaLng = destination.lng() - currentPosition.lng();
+
+    const distance = Math.sqrt(deltaLat * deltaLat + deltaLng * deltaLng);
+
+    if (distance < step) {
+        return destination;
+    }
+
+    const ratio = step / distance;
+    const newLat = currentPosition.lat() + deltaLat * ratio;
+    const newLng = currentPosition.lng() + deltaLng * ratio;
+
+    return new google.maps.LatLng(newLat, newLng);
+}
+
+        function savePosition(position) {
+            const positionObj = { lat: position.lat(), lng: position.lng() };
+            localStorage.setItem('dronePosition', JSON.stringify(positionObj));
+        }
+
+        function getSavedPosition() {
+            const position = localStorage.getItem('dronePosition');
+            return position ? JSON.parse(position) : null;
+        }
+
+        function updateCoordinates(position) {
+            document.getElementById('coordinates').innerText = `Lat: ${position.lat().toFixed(6)}, Lng: ${position.lng().toFixed(6)}, Alt: ${altitude}m`;
+        }
+
+        function increaseAltitude() {
+            altitude += 1;
+            updateCoordinates(marker.getPosition());
+        }
+
+        function decreaseAltitude() {
+            if (altitude > 0) {
+                altitude -= 1;
+                updateCoordinates(marker.getPosition());
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="top-bar">
+        <button onclick="window.location.href='main.html'">RescueReach</button>
+        <button onclick="window.location.href='satellite.html'">Satellite Mode</button>
+        <button onclick="window.location.href='detection.html'">Drone View</button>
+    </div>
+    <div id="map-container">
+        <div id="map" style="height: 100%; width: 100%;"></div>
+        <div id="controls">
+            <div>
+                <button onclick="increaseAltitude()">⬆️</button>
+                <span id="altitude">Altitude</span>
+                <button onclick="decreaseAltitude()">⬇️</button>
+            </div>
+            <div id="coordinates">Lat: -, Lng: -, Alt: 0m</div>
+        </div>
+    </div>
+</body>
+</html>
