@@ -59,7 +59,43 @@
             flex-direction: column;
             gap: 10px;
         }
+        .toggle-button {
+            position: relative;
+            padding-right: 30px;
+        }
+        .toggle-button::after {
+            content: '✔';
+            position: absolute;
+            right: 10px;
+            display: none;
+        }
+        .toggle-button.active::after {
+            display: inline;
+        }
+        #altitude-changer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        #altitude-changer button {
+            width: 50px;
+            height: 50px;
+        }
     </style>
+    <script>
+        function toggleButton(button) {
+            button.classList.toggle('active');
+        }
+
+        function changeAltitude(amount) {
+            const altitudeDisplay = document.getElementById('altitude-display');
+            let currentAltitude = parseInt(altitudeDisplay.innerText);
+            currentAltitude += amount;
+            if (currentAltitude < 0) currentAltitude = 0;
+            altitudeDisplay.innerText = currentAltitude + ' meters';
+        }
+    </script>
 </head>
 <body>
     <div class="top-bar">
@@ -76,8 +112,8 @@
         </div>
         <div id="controls-container">
             <div id="side-buttons">
-                <button>Siren</button>
-                <button>Life Preserver Drop</button>
+                <button class="toggle-button" onclick="toggleButton(this)">Broadcast Instructions</button>
+                <button class="toggle-button" onclick="toggleButton(this)">Life Preserver Drop</button>
             </div>
             <div id="arrow-buttons">
                 <button></button>
@@ -89,6 +125,11 @@
                 <button></button>
                 <button>⬇️</button>
                 <button></button>
+            </div>
+            <div id="altitude-changer">
+                <button onclick="changeAltitude(1)">⬆️</button>
+                <div>Altitude: <span id="altitude-display">2 meters</span></div>
+                <button onclick="changeAltitude(-1)">⬇️</button>
             </div>
             <div id="side-buttons">
                 <!-- Empty div to balance the layout -->
