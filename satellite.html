@@ -10,24 +10,22 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
-        .top-bar {
-            background-color: #265ab3;
-            overflow: hidden;
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background-color: #1A1A1A;
+            color: #FFFFFF;
         }
-        .top-bar button {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center; 
-            padding: 14px 16px;
+        header h1 {
+            font-size: 1.8rem;
+        }
+        header nav a {
+            margin: 0 15px;
+            color: #FFFFFF;
             text-decoration: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .top-bar button:hover {
-            background-color: #ddd;
-            color: rgb(0, 0, 0);
+            font-weight: 600;
         }
         #map-container {
             position: relative;
@@ -108,47 +106,47 @@
         }
 
         function moveMarker() {
-    const step = 0.00005; // Smaller step size for slower movement
-    const interval = setInterval(function() {
-        if (!movingToClick || !clickDestination) {
-            clearInterval(interval);
-            return;
+            const step = 0.00005; // Smaller step size for slower movement
+            const interval = setInterval(function() {
+                if (!movingToClick || !clickDestination) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const currentPosition = marker.getPosition();
+                const destination = clickDestination;
+
+                const newLatLng = moveTowards(currentPosition, destination, step);
+                marker.setPosition(newLatLng);
+                updateCoordinates(newLatLng);
+
+                if (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, destination) < step) {
+                    marker.setPosition(destination);
+                    updateCoordinates(destination);
+                    savePosition(destination);
+                    if (tempMarker) tempMarker.setMap(null);
+                    movingToClick = false;
+                    clearInterval(interval);
+                }
+            }, 1000); // Increased interval for slower movement
         }
 
-        const currentPosition = marker.getPosition();
-        const destination = clickDestination;
+        function moveTowards(currentPosition, destination, step) {
+            const deltaLat = destination.lat() - currentPosition.lat();
+            const deltaLng = destination.lng() - currentPosition.lng();
 
-        const newLatLng = moveTowards(currentPosition, destination, step);
-        marker.setPosition(newLatLng);
-        updateCoordinates(newLatLng);
+            const distance = Math.sqrt(deltaLat * deltaLat + deltaLng * deltaLng);
 
-        if (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, destination) < step) {
-            marker.setPosition(destination);
-            updateCoordinates(destination);
-            savePosition(destination);
-            if (tempMarker) tempMarker.setMap(null);
-            movingToClick = false;
-            clearInterval(interval);
+            if (distance < step) {
+                return destination;
+            }
+
+            const ratio = step / distance;
+            const newLat = currentPosition.lat() + deltaLat * ratio;
+            const newLng = currentPosition.lng() + deltaLng * ratio;
+
+            return new google.maps.LatLng(newLat, newLng);
         }
-    }, 1000); // Increased interval for slower movement
-}
-
-function moveTowards(currentPosition, destination, step) {
-    const deltaLat = destination.lat() - currentPosition.lat();
-    const deltaLng = destination.lng() - currentPosition.lng();
-
-    const distance = Math.sqrt(deltaLat * deltaLat + deltaLng * deltaLng);
-
-    if (distance < step) {
-        return destination;
-    }
-
-    const ratio = step / distance;
-    const newLat = currentPosition.lat() + deltaLat * ratio;
-    const newLng = currentPosition.lng() + deltaLng * ratio;
-
-    return new google.maps.LatLng(newLat, newLng);
-}
 
         function savePosition(position) {
             const positionObj = { lat: position.lat(), lng: position.lng() };
@@ -178,11 +176,14 @@ function moveTowards(currentPosition, destination, step) {
     </script>
 </head>
 <body>
-    <div class="top-bar">
-        <button onclick="window.location.href='index.html'">RescueReach</button>
-        <button onclick="window.location.href='satellite.html'">Satellite Mode</button>
-        <button onclick="window.location.href='detection.html'">Drone View</button>
-    </div>
+    <header>
+        <h1>Rescue Reach</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="satellite.html">Satellite Mode</a>
+            <a href="detection.html">Drone View</a>
+        </nav>
+    </header>
     <div id="map-container">
         <div id="map" style="height: 100%; width: 100%;"></div>
         <div id="controls">
