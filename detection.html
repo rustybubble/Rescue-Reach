@@ -41,6 +41,10 @@
             justify-content: center;
             align-items: center;
         }
+        #video-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
         #controls-container {
             display: flex;
             justify-content: space-between;
@@ -109,14 +113,12 @@
             <a href="index.html">Home</a>
             <a href="satellite.html">Satellite Mode</a>
             <a href="detection.html">Drone View</a>
+            <a href="verification.html">Verification</a>
         </nav>
     </header>
     <div id="container">
         <div id="video-container">
-            <video controls>
-                <source src="videos/output.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>            
+            <img src="images/slide1.png" alt="Drone View">
         </div>
         <div id="controls-container">
             <div id="side-buttons">
