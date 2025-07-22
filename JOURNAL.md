@@ -1,11 +1,121 @@
 ---
 title: "Rescue Reach"
-author: “Joseph Mathew” 
+author: “Joseph Mathew & Team” 
 description: "Autonomous AI-powered drone system designed to detect rip currents and assist swimmers in distress, helping lifeguards respond faster and save lives."
 created_at: "2025-03-20"
 ---
 
+**Total logged hours: 60+ (design, code, training, outreach, competitions)**  
+- All mechanical CAD built in Onshape, full system modeled in Blender.  
+- AI inference run on YOLOv8 + simulated beach environments  
+![alt text](f4bd40_bfd9f63a98b34ef9ae795e7787c50bcb~mv2-1.avif)
+---
 
+# March 20th: The idea was born  
+While talking with Captain Butch Arbin, a veteran lifeguard in Ocean City, Maryland, we learned just how common—and deadly—rip currents are.
+
+We then thought of a concept that could:
+- Use computer vision to detect rip currents  
+- Alert lifeguards via a live interface  
+- Drop a flotation ring automatically  
+
+We named the system: **Rescue Reach**.
+
+**Total time spent: 3h**
+
+---
+
+# March 28th: CAD begins in Onshape  
+Started modeling the payload drop system in Onshape. Specs were designed around the DJI Mini.
+
+ ![alt text](image-1.png)
+
+**Total time spent: 4h**
+
+---
+
+# April 4th: AI model
+Found image classification model on RoboFlow that detects rip-currents and works pretty fast.
+Tested it to see if it works. https://universe.roboflow.com/hrw/rip-rm14s
+![alt text](f4bd40_5dd8f1cf325a4510b74838193cb3caab~mv2.avif)
+
+**Total time spent: 6h**
+
+---
+
+# April 12th: Beta web UI + model test  
+Designed a simulated interface for lifeguards using HTML. When a “rip current” is detected, the interface displays:
+- Drone GPS  
+- Rip zone bounding box  
+- Action buttons: Satellite Mode, Drone View, Verification, Broadcast Instructions, Life Preserver Drop, True Rip Current, False Alarm, Download/Send Images  
+
+**Demo link:**  
+🔗 [https://rustybubble.github.io/Rescue-Reach/satellite.html](https://rustybubble.github.io/Rescue-Reach/satellite.html)
+
+**Total time spent: 5h**
+
+---
+
+# April 20th: Follow-up with Captain Butch  
+Reconnected with Captain Butch Arbin to show our progress. He liked the concept and encouraged testing at rip-current-prone beaches like Playa Zipolite and Panama City Beach.
+
+Feedback from a Delaware lifeguard:
+- Interface must be easy to learn  
+- Lifeguards shouldn’t need drone training  
+- Alerts should be loud and visual  
+
+That feedback shaped our lifeguard dashboard design.
+
+**Total time spent: 3h**
+
+---
+
+# May 14th: Product Page  
+Created a website for investors/competition judges to view our project.
+
+https://josephkmathew.wixsite.com/rescuereach
+
+**Total time spent: 20h**
+
+---
+
+# May 23rd: Pitch video production for competitions
+Made a 5 minute pitch video with:
+- Narration  
+- Surf visuals  
+- Overlay UI elements  
+
+**Video link:**  
+📹 [https://youtu.be/T3lOsVPMKPw](https://youtu.be/T3lOsVPMKPw)
+
+**Total time spent: 4h**
+
+---
+
+# May 29th: Competitions + awards  
+- **2025 Paradigm Challenge Finalist**  
+- **Top 10 at University of the District of Columbia Capital Cup**
+
+**Total time spent: 4h**
+
+---
+
+# July 5th: Outreach + funding search  
+Contacted several organizations:
+- NOAA Wakefield  
+- Assateague State Park  
+- WebCOOS  
+
+Mr. Scott Schumann responded positively and offered to connect us with surf zone forecasters and lifeguards.
+
+Began researching:
+- NOAA SBIR  
+- NSF I-Corps Microgrant  
+- BOEM Environmental R&D Fund
+
+**Total time spent: 5h**
+
+---
 
 
 
