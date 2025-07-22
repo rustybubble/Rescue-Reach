@@ -8,7 +8,7 @@ created_at: "2025-03-20"
 **Total logged hours: 60+ (design, code, training, outreach, competitions)**  
 - All mechanical CAD built in Onshape, full system modeled in Blender.  
 - AI inference run on YOLOv8 + simulated beach environments  
-![alt text](f4bd40_bfd9f63a98b34ef9ae795e7787c50bcb~mv2-1.avif)
+![alt text](drone.avif)
 ---
 
 # March 20th: The idea was born  
